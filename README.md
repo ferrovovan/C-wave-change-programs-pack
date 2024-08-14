@@ -30,7 +30,9 @@ Available programs:
 - `wav_info`
 - `concat_wav`
 - `mult_wav`
-- `cut_wav`
+- `cut_int_wav`
+- `cut_out_wav`
+- `insert_wav`
 - `two_channels_wav`
 - `form_pitch`
 - `zero_wav (null_wav)`
@@ -47,11 +49,17 @@ Concatenates 2 wav files of similar format.
 - mult_wav  
 Concatenates a wav file with itself.
 
-- cut_wav  
+- cut_in_wav  
 Cuts a gap of specified length.
 
+- cut_out_wav  
+Cut out fragment, with smooth transition possibility (parametr -m).  
+
+- insert_wav  
+Insert *second* into *first* audio.  
+
 - two_channels_wav  
-Converts mono to stereo.  
+Converts mono to stereo (dublicate single channel).  
 
 - form_pitch  
 Records a sound wave of the desired frequency and amplitude

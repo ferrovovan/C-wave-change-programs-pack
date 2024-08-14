@@ -1,33 +1,77 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -o2
 
-SRCDIR = source
+SRCDIR = source/programs
 BINDIR = build
 
+OS := $(shell uname)
 
-SINGLE_TARGETS := wav_info concat_wav boosted_wav slowed_wav mult_wav cut_wav two_channels_wav form_pitch_wav null_wav
+postfix = 
+
+ifeq ($(OS), Linux)
+    # Команды для Linux
+endif
+
+ifeq ($(OS), Darwin)
+    # Команды для macOS
+endif
+
+ifeq ($(OS), Windows_NT)
+	postfix = .exe
+endif
+
+
+INCLUDE_DIRS = -Isource/libraries
+HOUR_WAV_DIR = $(SRCDIR)/1_hour_wav/
+
 
 $(BINDIR):
-	mkdir $(BINDIR)
+	mkdir  $(BINDIR)
 
-define compile_target
-$1: $(BINDIR)
-	$(CC) $(CFLAGS) -o $(BINDIR)/$1.out $(SRCDIR)/$1.c
-endef
+wav_info: $(BINDIR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/wav_info$(postfix) $(SRCDIR)/wav_info.c
 
-# задание целей для одиночных файлов
-$(foreach target,$(SINGLE_TARGETS),$(eval $(call compile_target,$(target))))
+#boosted_wav:
+#	$(CC) $(CFLAGS) -o $(BINDIR)/boosted_wav$(postfix) $(SRCDIR)/boosted_wav.c
 
-1_hour_wav: $(BINDIR)
-	$(CC) $(CFLAGS) -o $(BINDIR)/1_hour_extender.out $(SRCDIR)/1_hour_wav/1_hour_wav.c
+concat_wav: $(BINDIR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/concat_wav$(postfix) $(SRCDIR)/concat_wav.c
+
+mult_wav: $(BINDIR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/mult_wav$(postfix) $(SRCDIR)/mult_wav.c
+
+#slowed_wav:
+#	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/slowed_wav$(postfix) $(SRCDIR)/slowed_wav.c
+
+
+cut_wav: $(BINDIR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/cut_wav$(postfix) $(SRCDIR)/cut_wav.c
 
 fan_1_hour_wav: $(BINDIR)
-	$(CC) $(CFLAGS) -o $(BINDIR)/fan_1_hour_wav.out $(SRCDIR)/1_hour_wav/fan_1_hour_wav.c
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/fan_1_hour_wav$(postfix) $(SRCDIR)/fan_1_hour_wav.c
+
+two_channels_wav: $(BINDIR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/two_channels_wav$(postfix) $(SRCDIR)/two_channels_wav.c
+
+form_pitch_wav: $(BINDIR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/form_pitch_wav$(postfix) $(SRCDIR)/form_pitch_wav.c
+
+
+SINGLE_TARGETS := mult_wav concat_wav wav_info cut_wav  fan_1_hour_wav two_channels_wav zero_wav null_wav form_pitch_wav
+# boosted_wav slowed_wav
+
+
+1_hour_wav: $(BINDIR)
+	$(MAKE) -C $(HOUR_WAV_DIR)
+	mv $(HOUR_WAV_DIR)1_hour_extender$(postfix)  $(BINDIR)/1_hour_extender$(postfix)
 
 zero_wav: $(BINDIR)
-	$(CC) $(CFLAGS) -o $(BINDIR)/zero_wav.out $(SRCDIR)/null_wav.c
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/zero_wav$(postfix) $(SRCDIR)/null_wav.c
 
-all: $(SINGLE_TARGETS) 1_hour_wav fan_1_hour_wav
+null_wav: $(BINDIR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/zero_wav$(postfix) $(SRCDIR)/null_wav.c
+
+all: $(SINGLE_TARGETS) 1_hour_wav
 
 clear:
 	rm -rf $(BINDIR)

@@ -2,29 +2,32 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -o2
 
 SRCDIR = source
-BINDIR = bin
+BINDIR = build
 
 
-concat_wav: $(SRCDIR)/concat_wav.c
-	$(CC) $(CFLAGS) -o concat_wav $(SRCDIR)/concat_wav.c
+SINGLE_TARGETS := wav_info concat_wav boosted_wav slowed_wav mult_wav cut_wav two_channels_wav form_pitch_wav null_wav
 
-mult_wav: $(SRCDIR)/mult_wav.c
-	$(CC) $(CFLAGS) -o mult_wav $(SRCDIR)/mult_wav.c
+$(BINDIR):
+	mkdir $(BINDIR)
 
-slowed_wav: $(SRCDIR)/slowed_wav.c
-	$(CC) $(CFLAGS) -o slowed_wav $(SRCDIR)/slowed_wav.c
+define compile_target
+$1: $(BINDIR)
+	$(CC) $(CFLAGS) -o $(BINDIR)/$1.out $(SRCDIR)/$1.c
+endef
 
-boosted_wav: $(SRCDIR)/boosted_wav.c
-	$(CC) $(CFLAGS) -o boosted_wav $(SRCDIR)/boosted_wav.c
+# задание целей для одиночных файлов
+$(foreach target,$(SINGLE_TARGETS),$(eval $(call compile_target,$(target))))
 
-wav_info: $(SRCDIR)/wav_info.c
-	$(CC) $(CFLAGS) -o wav_info $(SRCDIR)/wav_info.c
+1_hour_wav: $(BINDIR)
+	$(CC) $(CFLAGS) -o $(BINDIR)/1_hour_extender.out $(SRCDIR)/1_hour_wav/1_hour_wav.c
 
-1_hour_wav: $(SRCDIR)/1_hour_wav/1_hour_wav.c
-	$(CC) $(CFLAGS) -o 1_hour_extender.out $(SRCDIR)/1_hour_wav/1_hour_wav.c
+fan_1_hour_wav: $(BINDIR)
+	$(CC) $(CFLAGS) -o $(BINDIR)/fan_1_hour_wav.out $(SRCDIR)/1_hour_wav/fan_1_hour_wav.c
 
-fan_1_hour_wav: $(SRCDIR)/1_hour_wav/1_hour_wav-fan.c
-	$(CC) $(CFLAGS) -o fan_1_hour_extender.out $(SRCDIR)/1_hour_wav/1_hour_wav-fan.c
+zero_wav: $(BINDIR)
+	$(CC) $(CFLAGS) -o $(BINDIR)/zero_wav.out $(SRCDIR)/null_wav.c
 
-all: boosted_wav concat_wav mult_wav slowed_wav wav_info 1_hour_wav fan_1_hour_wav
+all: $(SINGLE_TARGETS) 1_hour_wav fan_1_hour_wav
 
+clear:
+	rm -rf $(BINDIR)

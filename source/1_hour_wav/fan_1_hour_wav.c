@@ -1,6 +1,7 @@
 #define PRINT_HEADER 0
 
 #include "../read_wav.h"
+char *in=NULL, *start_rep=NULL, *end_rep=NULL, *mix_dlit=NULL, *expected_dur=NULL, *out=NULL;
 #include "read_args.c"
 #include <string.h>
 
@@ -160,33 +161,32 @@ int hour_wav_file(FILE *inputFile, FILE *outputFile, char* start_rep, char* end_
 
 int main(int argc, char *argv[]) {
 
-	char *in=NULL, *start_rep=NULL, *end_rep=NULL, *mix_dlit=NULL, *expected_dur=NULL, *out=NULL;
-	short test=0;
-
-	int code = read_params(argc, argv, &in, &out, &start_rep, &end_rep, &mix_dlit, &expected_dur, &test);
 	
-	if (code == 0){
+	short test=0, test_rep=0;
 
-		FILE *inputFile = fopen(in, "rb");
-		if (inputFile == NULL) {
-			perror("Ошибка открытия входного файла");
-			return -1;
-		}
-		FILE *outputFile;
-		if (test == 0){
-			outputFile = fopen(out, "wb");
-			if (outputFile == NULL) {
-				perror("Ошибка открытия выходного файла");
-				fclose(inputFile);
-				return -1;
-			}
-		}
-		// Передача аргументов в функцию
-		hour_wav_file(inputFile, outputFile, start_rep, end_rep, mix_dlit, expected_dur, test);
-		return 0;
-	} else {
+	int code = read_params(argc, argv, &test, &test_rep);
+	
+	if (code != 0){
 		perror("Некорректное считывание параметров");
 		return -1;
 	}
+
+	FILE *inputFile = fopen(in, "rb");
+	if (inputFile == NULL) {
+		perror("Ошибка открытия входного файла");
+		return -1;
+	}
+	FILE *outputFile;
+	if (test == 0){
+		outputFile = fopen(out, "wb");
+		if (outputFile == NULL) {
+			perror("Ошибка открытия выходного файла");
+			fclose(inputFile);
+			return -1;
+		}
+	}
+	// Передача аргументов в функцию
+	hour_wav_file(inputFile, outputFile, start_rep, end_rep, mix_dlit, expected_dur, test);
+	return 0;
 }
 

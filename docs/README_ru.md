@@ -1,6 +1,6 @@
 # Набор программ для изменения wav-файлов на Си
 
-![LOGO](https://github.com/ferrovovan/C-wave-change-pack/blob/main/Logo.png)  
+![LOGO](../images/Logo.png)  
 
 Использование данного программного обеспечения предполагает **от пользователя**  знания:  
 1. Что такое директория.
@@ -22,8 +22,8 @@
 Набор кода для чтения и изменения wav файлов.  
 Программы для чтения и изменения wav-файлов.  
 Обрабатывают только PCM-совместимые форматы (
-смотри ![WAVE Specifications/rfc2361.txt](https://github.com/ferrovovan/C-wave-change-pack/blob/update_readme/WAVE%20Specifications/rfc2361.txt)  300 строку, 
-или ![WAVE Specifications/Wave File Specifications.html](https://github.com/ferrovovan/C-wave-change-pack/blob/update_readme/WAVE%20Specifications/Wave%20File%20Specifications.html)
+смотри [WAVE Specifications/rfc2361.txt](../WAVE%20Specifications/rfc2361.txt)  300 строку, 
+или [WAVE Specifications/Wave File Specifications.html](../WAVE%20Specifications/Wave%20File%20Specifications.html)
 ).  
   
 Доступные программы:
@@ -76,12 +76,12 @@
 
 
 ### Сборка (компиляция)
-Перейдите в **корневую** директорию и используйте команду шаблоном `make <program_name>`, где *<program_name>* - название программы из списка *Доступные программы*. Компилирует программу в директорию **build**.   
-Пример команды:
+Перейдите в **корневую** директорию и используйте команду шаблоном `make <program_name>`, где *<program_name>* - название программы из списка *Доступные программы*. Это скомпилирует программу в директорию **build**.   
+Например команда:
 ```
 make cut_wav
 ```
-Это создаст исполняемый файл *cut_wav* в директории **build** (*cut_wav.exe* в Windows).  
+Создаст исполняемый файл *cut_wav* в директории **build** (*cut_wav.exe* в Windows).  
   
 Или скомпилируйте все программы разом!
 ```

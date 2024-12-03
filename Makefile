@@ -40,6 +40,9 @@ wav_info: $(BINDIR)
 concat_wav: $(BINDIR)
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/concat_wav$(postfix) $(SRCDIR)/concat_wav.c
 
+concat_upgrade_wav: $(BINDIR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/concat_upgrade_wav$(postfix) $(SRCDIR)/concat_upgrade_wav.c
+
 mult_wav: $(BINDIR)
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/mult_wav$(postfix) $(SRCDIR)/mult_wav.c
 

@@ -7,7 +7,7 @@ Use of this software assumes **user** knowledge of:
 2. How to open a terminal in the desired directory.
 3. How to use the executable file in the terminal.
 4. Application of the following analogy:  
-  If the program `./build/cut_wav` prints help  
+  If the program `./build/cut_in_wav` prints help  
 """  
   Параметры:  
    [ -i | --input ] <входной_файл>   
@@ -16,7 +16,7 @@ Use of this software assumes **user** knowledge of:
    [ -o | --output ] <выходной_файл>  
    --test   вывод статистики предполагаемого результата  
 """  
-  Then you need to use it with the template `./build/cut_wav -i <input_file> -s <start of cutting> -e <end of cutting> -o <output_file>`.  
+  Then you need to use it with the template `./build/cut_in_wav -i <input_file> -s <start of cutting> -e <end of cutting> -o <output_file>`.  
   
   
 A set of code for reading and changing wav files.  
@@ -79,9 +79,9 @@ Same as 1_hour_wav, but with incorrect byte decoding, leading to strange results
 Go to the **root** directory and use the command with the template `make <program_name>`, where *<program_name>* is the name of the program from the *Available programs* list. Compiles the program into the **build** directory.   
 Example command:
 ```
-make cut_wav
+make cut_in_wav
 ```
-This will create the *cut_wav* executable in the **build** directory (*cut_wav.exe* on Windows).  
+This will create the *cut_in_wav* executable in the **build** directory (*cut_in_wav.exe* on Windows).  
   
 Or compile all programs at once!
 ```
@@ -131,13 +131,13 @@ Example:
 There will be 3 consecutive *Sidorovich.wav* in *Wash now.wav* .
   
   
-##### cut_wav  
+##### cut_in_wav  
 -i \<input_file\> -o \<output_file\> -s \<start of trimming\> -e \<end of trimming\>  
 Tags are written in `HH:MM:SS.MS` format.  
   
 Example:  
 ```
-./build/cut_wav -i "samples/Tchaikovsky - Piano Concerto 1 (B Flat Minor).wav" -s 2:20 -e 3:5.2 -o "sonata-allegro.wav"
+./build/cut_in_wav -i "samples/Tchaikovsky - Piano Concerto 1 (B Flat Minor).wav" -s 2:20 -e 3:5.2 -o "sonata-allegro.wav"
 ```
 Cuts a fragment from *Tchaikovsky - Piano Concerto 1 (B Flat Minor).wav* [^1] into *sonata-allegro.wav*, starting from the second minute 20 seconds, ending with the third minute 5 seconds 2 tenths of a second.  
 
@@ -184,3 +184,4 @@ Start before 34.5 seconds
  \+ dublicate period from 34.5 to 01:33.2  twice (see `--test`)   
  \+ end from 01:33.2 to 01:52.34   
 result = 3 minutes 45 seconds.
+

@@ -3,9 +3,10 @@
 #define REQ_ARG_ED_TIME
 
 #include "getopt_args_parser.h"
-//
+// including end
 
 
+#include "FileManager.h"
 #include "read_wav.h"
 #include <stdint.h>
 
@@ -38,28 +39,24 @@ void zero_wav_file(FILE *outputFile, double time){
 
 
 int main(int argc, char *argv[]) {
-// Считывание
+	// Считывание
 	if (parse_arguments(argc, argv) != 0) {
 		return EXIT_FAILURE;
 	}
 	
-// Открытие файлов
-	FILE *outputFile = fopen(output_file, "wb");
-	if (outputFile == NULL) {
-		printf("Ошибка открытия выходного файла.\n");
-		return EXIT_FAILURE;
-	}
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
 
-// Валидация
-	double time = HHMMSS_to_seconds(expected_duration);
-	if( time == -1 ){
-		printf("Неверный формат %s\n", expected_duration);
-		return EXIT_FAILURE;
-	}
+	FILE* outputFile = safe_open_file(&fm, output_file, "wb");)
 
-// Передача аргументов в функцию
+	// Открытие параметров
+	double time = validate_and_convert_time(expected_duration, -1, "expected_duration");
+	if (time == -1) return EXIT_FAILURE;
+
+	// Передача аргументов в функцию
 	zero_wav_file(outputFile, time);
 
-	fclose(outputFile);
+	close_all_files(&fm);
 	return EXIT_SUCCESS;
 }
+

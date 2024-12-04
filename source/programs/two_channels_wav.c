@@ -9,6 +9,7 @@
 #define BUFF_SIZE 1024
 #define PRINT_HEADER 1
 
+#include "FileManager.h"
 #include "read_wav.h"
 
 
@@ -51,28 +52,20 @@ void bisect_wav(FILE *inputFile, FILE *outputFile){
 
 
 int main(int argc, char *argv[]) {
-// Считывание
+	// Считывание
 	if (parse_arguments(argc, argv) != 0) {
 		return EXIT_FAILURE;
 	}
 	
-// Открытие файлов
-	FILE *inputFile = fopen(input_file, "rb");
-	if (inputFile == NULL) {
-		printf("Ошибка открытия входного файла.\n");
-		return EXIT_FAILURE;
-	}
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
 
-	FILE *outputFile = fopen(output_file, "wb");
-	if (outputFile == NULL) {
-		printf("Ошибка открытия выходного файла.\n");
-		fclose(inputFile);
-		return EXIT_FAILURE;
-	}
+	FILE* inputFile  = safe_open_file(&fm, input_file, "rb");
+	FILE* outputFile = safe_open_file(&fm, output_file, "wb");)
 
 	bisect_wav(inputFile, outputFile);
 
-	fclose(inputFile);	fclose(outputFile);
+	close_all_files(&fm);
 	return EXIT_SUCCESS;
 }
 

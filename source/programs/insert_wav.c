@@ -1,6 +1,7 @@
 #define BUFF_SIZE 1024
 #define PRINT_HEADER 0
 
+#include "FileManager.h"
 #include "read_wav.h"
 
 
@@ -16,7 +17,7 @@ WavHeader createCombinedHeader(WavHeader *header1, WavHeader *header2) {
 	combinedHeader.chunkSize = samples_size + 44;
 	
 
-	strcpy(combinedHeader.subchunk2Id, "data");
+	strncpy(combinedHeader.subchunk2Id, "data", 4);
 	combinedHeader.subchunk2Size = samples_size;
 
 	return combinedHeader;
@@ -78,40 +79,22 @@ int main(int argc, char *argv[]) {
 		printf("Использование: %s <входной_файл1> <входной_файл2> <время> <выходной_файл>\n", argv[0]);
 		return EXIT_FAILURE;
 	}
-	
-	double time = HHMMSS_to_seconds(argv[3]);
-	if( time == -1 ){
-		printf("Неверный формат %s\n", argv[3]);
-		return EXIT_FAILURE;
-	}
-	
-	// Открытие первого входного файла для чтения
-	FILE *inputFile1 = fopen(argv[1], "rb");
-	if (inputFile1 == NULL) {
-		printf("Ошибка открытия первого входного файла.\n");
-		return EXIT_FAILURE;
-	}
 
-	// Открытие второго входного файла для чтения
-	FILE *inputFile2 = fopen(argv[2], "rb");
-	if (inputFile2 == NULL) {
-		printf("Ошибка открытия второго входного файла.\n");
-		fclose(inputFile1);
-		return EXIT_FAILURE;
-	}
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
 
-	// Открытие выходного файла для записи
-	FILE *outputFile = fopen(argv[4], "wb");
-	if (outputFile == NULL) {
-		printf("Ошибка открытия выходного файла.\n");
-		fclose(inputFile1);	fclose(inputFile2);
-		return EXIT_FAILURE;
-	}
+	FILE* inputFile1 = safe_open_file(&fm, argv[1], "rb");
+	FILE* inputFile2 = safe_open_file(&fm, argv[2], "rb");
+	FILE* outputFile = safe_open_file(&fm, argv[4], "wb");
 
+	// Открытие параметров
+	double start_time_double = validate_and_convert_time(argv[3], -1, argv[3]);
+	if (start_time_double == -1) return EXIT_FAILURE;
 
+	// Передача аргументов в функцию
 	insert_wav_files(inputFile1, inputFile2, outputFile, time);
 	
-	fclose(inputFile1);	fclose(inputFile2);	fclose(outputFile);
+	close_all_files(&fm);
 	return EXIT_SUCCESS;
 }
 

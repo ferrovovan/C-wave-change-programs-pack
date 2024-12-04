@@ -1,6 +1,7 @@
 #define BUFF_SIZE 1024
 #define PRINT_HEADER 1
 
+#include "FileManager.h"
 #include "read_wav.h"
 
 
@@ -13,29 +14,15 @@ WavHeader create_extendedHeader(WavHeader *in_header, const int num) {
 
 	extendedHeader.chunkSize = samples_size + 44;
 
-	strcpy(extendedHeader.subchunk2Id, "data");
+	strncpy(extendedHeader.subchunk2Id, "data", 4);
 	extendedHeader.subchunk2Size = samples_size;
 
 	return extendedHeader;
 }
 
 
-void cut_wave_file(const char* in, const char* out, int fastdownFactor){
-	FILE *inputFile, *outputFile;
-
-	// Открытие первого входного файла для чтения
-	inputFile = fopen(in, "rb");
-	if (inputFile == NULL) {
-		perror("Ошибка открытия входного файла");
-	}
-
-	// Открытие выходного файла для записи
-	outputFile = fopen(out, "wb");
-	if (outputFile == NULL) {
-		perror("Ошибка открытия выходного файла");
-		fclose(inputFile);
-	}
-
+void cut_wave_file(FILE *inputFile, FILE *outputFile, int fastdownFactor)
+{
 	// Чтение заголовка первого файла
 	WavHeader in_header;
 	readWavHeader(inputFile, &in_header);
@@ -70,9 +57,6 @@ void cut_wave_file(const char* in, const char* out, int fastdownFactor){
 			fwrite(sampleData, sizeof(uint8_t), blockSize, outputFile);
 	}
 
-	// Закрытие файлов
-	fclose(inputFile);
-	fclose(outputFile);
 	printf("\nФайл успешно замедлен.\n");
 }
 
@@ -82,9 +66,17 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
+
+	FILE* inputFile  = safe_open_file(&fm, argv[1], "rb");
+	FILE* outputFile = safe_open_file(&fm, argv[2], "wb");
+
+	// Открытие параметров
 	int number = atoi(argv[3]);	// Преобразование строки в целое число
 	// Передача аргументов в функцию
-	cut_wave_file(argv[1], argv[2], number);
+	cut_wave_file(inputFile, outputFile, number);
 	return 0;
 }
+
 

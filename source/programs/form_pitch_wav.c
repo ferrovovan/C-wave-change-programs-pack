@@ -1,3 +1,4 @@
+#include "FileManager.h"
 #include "read_wav.h"
 #include <stdint.h>
 
@@ -55,12 +56,12 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	FILE *outputFile = fopen(argv[1], "wb");
-	if (outputFile == NULL) {
-		printf("Ошибка открытия выходного файла.\n");
-		return EXIT_FAILURE;
-	}
-	
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
+
+	FILE* outputFile = safe_open_file(&fm, argv[1], "wb");
+
+	// Открытие параметров
 	freq = atof(argv[2]);
 	if( freq == 0 ){
 		printf("Некорректное значение частоты.\n");
@@ -80,9 +81,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	offset = 2 * MATH_PI * freq / sampleRate;
-
+	// Передача аргументов в функцию
 	write_pitch(outputFile, duration);
 	
-	fclose(outputFile);
+	close_all_files(&fm);
 	return EXIT_SUCCESS;
 }

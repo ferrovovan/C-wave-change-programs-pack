@@ -1,3 +1,4 @@
+#include "FileManager.h"
 #include "read_wav.h"
 
 
@@ -7,18 +8,18 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	FILE *inputFile = fopen(argv[1], "rb");
-	if (inputFile == NULL) {
-		perror("Ошибка открытия входного файла");
-	}
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
+
+	FILE* inputFile  = safe_open_file(&fm, input_file, "rb");
 	
 	WavHeader header;
 	readWavHeader(inputFile, &header);
 	printf("\nheader\n");
 	printWavHeader(&header);
 
-	fclose(inputFile);
-
-	return 0;
+	close_all_files(&fm);
+	return EXIT_SUCCESS;
 }
+
 

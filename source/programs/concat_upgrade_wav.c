@@ -1,6 +1,7 @@
 #define BUFF_SIZE 1024
 #define PRINT_HEADER 0
 
+#include "FileManager.h"
 #include "read_wav.h"
 
 uintptr_t ptr_start, ptr_start_mix, ptr_end_mix, ptr_end_start;
@@ -121,34 +122,19 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	// Открытие первого входного файла для чтения
-	FILE *inputFile1 = fopen(argv[1], "rb");
-	if (inputFile1 == NULL) {
-		printf("Ошибка открытия первого входного файла.\n");
-		return EXIT_FAILURE;
-	}
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
 
-	// Открытие второго входного файла для чтения
-	FILE *inputFile2 = fopen(argv[2], "rb");
-	if (inputFile2 == NULL) {
-		printf("Ошибка открытия второго входного файла.\n");
-		fclose(inputFile1);
-		return EXIT_FAILURE;
-	}
-
-	// Открытие выходного файла для записи
-	FILE *outputFile = fopen(argv[3], "wb");
-	if (outputFile == NULL) {
-		printf("Ошибка открытия выходного файла.\n");
-		fclose(inputFile1);	fclose(inputFile2);
-		return EXIT_FAILURE;
-	}
+	FILE* inputFile1 = safe_open_file(&fm, argv[1], "rb");
+	FILE* inputFile2 = safe_open_file(&fm, argv[2], "rb");
+	FILE* outputFile = safe_open_file(&fm, argv[3], "wb");
 
 	double mix_dlit = HHMMSS_to_seconds(argv[5]);
 	concat_wav_files(inputFile1, inputFile2, outputFile, mix_dlit);
 
-	fclose(inputFile1);	fclose(inputFile2);	fclose(outputFile);
+	close_all_files(&fm);
 	return EXIT_SUCCESS;
 }
+
 
 

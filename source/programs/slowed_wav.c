@@ -1,6 +1,7 @@
 #define BUFF_SIZE 1024
 #define PRINT_HEADER 1
 
+#include "FileManager.h"
 #include "read_wav.h"
 
 
@@ -20,22 +21,7 @@ WavHeader create_extendedHeader(WavHeader *in_header, const int num) {
 }
 
 
-void extend_wave_file(const char* in, const char* out, int slowdownFactor){
-	FILE *inputFile, *outputFile;
-
-	// Открытие первого входного файла для чтения
-	inputFile = fopen(in, "rb");
-	if (inputFile == NULL) {
-		perror("Ошибка открытия входного файла");
-	}
-
-	// Открытие выходного файла для записи
-	outputFile = fopen(out, "wb");
-	if (outputFile == NULL) {
-		perror("Ошибка открытия выходного файла");
-		fclose(inputFile);
-	}
-
+void extend_wave_file(FILE *inputFile, FILE *outputFile, int slowdownFactor){
 	// Чтение заголовка первого файла
 	WavHeader in_header;
 	readWavHeader(inputFile, &in_header);
@@ -71,9 +57,6 @@ void extend_wave_file(const char* in, const char* out, int slowdownFactor){
 			fwrite(sampleData, sizeof(uint8_t), blockSize, outputFile);
 	}
 
-	// Закрытие файлов
-	fclose(inputFile);
-	fclose(outputFile);
 	printf("\nФайл успешно замедлен.\n");
 }
 
@@ -82,10 +65,17 @@ int main(int argc, char *argv[]) {
 		printf("Использование: %s <входной_файл> <выходной_файл> <коеффициент замедления>\n", argv[0]);
 		return 1;
 	}
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
+
+	FILE* inputFile  = safe_open_file(&fm, argv[1], "rb");
+	FILE* outputFile = safe_open_file(&fm, argv[2], "wb");
 
 	int number = atoi(argv[3]);	// Преобразование строки в целое число
 	// Передача аргументов в функцию
-	extend_wave_file(argv[1], argv[2], number);
-	return 0;
+	extend_wave_file(inputFile, outputFile, number);
+
+	close_all_files(&fm);
+	return EXIT_SUCCESS;
 }
 

@@ -14,7 +14,7 @@
 #include "getopt_args_parser.h"
 // including end
 
-
+#include "FileManager.h"
 #include "read_wav.h"
 #include <string.h>
 
@@ -24,25 +24,18 @@ uint16_t uint8_to_uint16(uint8_t val1, uint8_t val2) {
 
 
 int main(int argc, char *argv[]) {
+	// Считывание
 	if (parse_arguments(argc, argv) != 0) {
 		return EXIT_FAILURE;
 	}
 
+	// Открытие файлов
+	FileManager fm;  init_FileManager(&fm);
 
-// files opening
-	FILE *inputFile = fopen(input_file, "rb");
-	if (inputFile == NULL) {
-		perror("Ошибка открытия входного файла");
-		return -1;
-	}
+	FILE* inputFile = safe_open_file(&fm, input_file, "rb");
 	FILE *outputFile;
 	if (test_flag == 0){
-		outputFile = fopen(output_file, "wb");
-		if (outputFile == NULL) {
-			perror("Ошибка открытия выходного файла");
-			fclose(inputFile);
-			return -1;
-		}
+		outputFile = safe_open_file(&fm, output_file, "wb");
 	}
 
 
@@ -174,13 +167,11 @@ int main(int argc, char *argv[]) {
 		fwrite(buffer, end_bytes_count, sizeof(uint8_t), outputFile);
 		free(buffer);
 
-
-		// Закрытие файлов
-		fclose(inputFile);
-		fclose(outputFile);
 		printf("\nУспешная запись.\n");
-		return 0;
+		close_all_files(&fm);
+		return EXIT_SUCCESS;
 	}
+	close_all_files(&fm);
 	return EXIT_SUCCESS;
 }
 

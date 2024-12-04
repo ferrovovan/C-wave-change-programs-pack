@@ -26,15 +26,19 @@ int main(int argc, char *argv[]) {
 	FILE* inputFile = safe_open_file(&fm, input_file, "rb");
 	FILE* outputFile = safe_open_file(&fm, output_file, "wb");
 
+	// Открытие параметров
 	double start_time_double = validate_and_convert_time(start_time, 0, "start_time");
 	if (start_time_double == -1) return EXIT_FAILURE;
 
 	double end_time_double = validate_and_convert_time(end_time, -1, "end_time");
 	if (end_time_double == -1) return EXIT_FAILURE;
 
-	cut_wav_file(inputFile, outputFile, start_time_double, end_time_double, (short )test_flag);
+	// Передача аргументов в функцию
+	cut_in_wav_file(inputFile, outputFile,
+                        start_time_double, end_time_double, (short )test_flag);
 
 	close_all_files(&fm);
 	return EXIT_SUCCESS;
 }
+
 

@@ -208,4 +208,20 @@ double bytes_count_to_seconds(uint32_t bytes_count, WavHeader *header){
 	double time = bytes_count / header->byteRate;
 	return  time;
 }
+
+double validate_and_convert_time(const char *time_str, double default_value, const char *prefix_name) {
+	if (time_str != NULL) {
+		printf("Валидация %s: %s\n", prefix_name, time_str);
+		double converted_time = HHMMSS_to_seconds(time_str);
+		if (converted_time == -1) {
+			fprintf(stderr, "Ошибка: неверный формат времени для %s: %s\n", prefix_name, time_str);
+			return -1;
+		}
+		printf("%s успешно преобразовано: %.2f сек.\n", prefix_name, converted_time);
+		return converted_time;
+	}
+	return default_value;
+}
+
 #endif /* READ_WAV_H */
+

@@ -5,7 +5,7 @@ example:
 #define REQ_ARG_INPUT
 #define REQ_ARG_OUTPUT
 
-#include "args_parser.h"
+#include "getopt_args_parser.h"
 //
 
 requared:
@@ -42,7 +42,7 @@ global variables:
 	char *end_time;
 	char *mix_duration;
 	char *expected_duration;
-	
+
 	char *count;
 	int test_flag;
 */

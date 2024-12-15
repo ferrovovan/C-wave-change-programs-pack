@@ -1,6 +1,7 @@
 # C wave-files change-programs pack
 
 ## Documentation
+Note: all docs files are utf-8 encoded.
 - [Русский](./docs/README_ru.md): Руководство пользователя и описание.
 - [English](./docs/README_en.md): User guide and description.
 

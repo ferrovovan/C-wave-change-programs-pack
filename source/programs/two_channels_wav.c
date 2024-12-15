@@ -13,7 +13,7 @@
 #include "read_wav.h"
 
 
-void bisect_wav(FILE *inputFile, FILE *outputFile){
+int bisect_wav(FILE *inputFile, FILE *outputFile){
 	WavHeader in_header;
 	readWavHeader(inputFile, &in_header);
 	if (PRINT_HEADER){
@@ -61,9 +61,9 @@ int main(int argc, char *argv[]) {
 	FileManager fm;  init_FileManager(&fm);
 
 	FILE* inputFile  = safe_open_file(&fm, input_file, "rb");
-	FILE* outputFile = safe_open_file(&fm, output_file, "wb");)
+	FILE* outputFile = safe_open_file(&fm, output_file, "wb");
 
-	bisect_wav(inputFile, outputFile);
+	int status = bisect_wav(inputFile, outputFile);
 
 	close_all_files(&fm);
 	return EXIT_SUCCESS;

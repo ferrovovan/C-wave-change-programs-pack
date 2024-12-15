@@ -6,14 +6,14 @@ BINDIR = build
 
 OS := $(shell uname)
 
-postfix = 
+postfix = # Ничего
 
 ifeq ($(OS), Linux)
-    # Команды для Linux
+	# Команды для Linux
 endif
 
 ifeq ($(OS), Darwin)
-    # Команды для macOS
+	# Команды для macOS
 endif
 
 ifeq ($(OS), Windows_NT)
@@ -65,7 +65,7 @@ form_pitch_wav: $(BINDIR)
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $(BINDIR)/form_pitch_wav$(postfix) $(SRCDIR)/form_pitch_wav.c
 
 
-SINGLE_TARGETS := mult_wav concat_wav wav_info cut_in_wav cut_out_wav insert_wav fan_1_hour_wav two_channels_wav zero_wav null_wav form_pitch_wav
+SINGLE_TARGETS := mult_wav concat_wav concat_upgrade_wav wav_info cut_in_wav cut_out_wav insert_wav fan_1_hour_wav two_channels_wav zero_wav null_wav form_pitch_wav
 # boosted_wav slowed_wav
 
 
@@ -81,5 +81,5 @@ null_wav: $(BINDIR)
 
 all: $(SINGLE_TARGETS) 1_hour_wav
 
-clear:
+clean:
 	rm -rf $(BINDIR)

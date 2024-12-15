@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
 	if (start_time_double == -1) return EXIT_FAILURE;
 
 	// Передача аргументов в функцию
+	double time = atoi(argv[3]);
 	insert_wav_files(inputFile1, inputFile2, outputFile, time);
 	
 	close_all_files(&fm);

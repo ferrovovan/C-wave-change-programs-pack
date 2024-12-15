@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 	// Открытие файлов
 	FileManager fm;  init_FileManager(&fm);
 
-	FILE* outputFile = safe_open_file(&fm, output_file, "wb");)
+	FILE* outputFile = safe_open_file(&fm, output_file, "wb");
 
 	// Открытие параметров
 	double time = validate_and_convert_time(expected_duration, -1, "expected_duration");

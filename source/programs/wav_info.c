@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 	// Открытие файлов
 	FileManager fm;  init_FileManager(&fm);
 
-	FILE* inputFile  = safe_open_file(&fm, input_file, "rb");
+	FILE* inputFile  = safe_open_file(&fm, argv[1], "rb");
 	
 	WavHeader header;
 	readWavHeader(inputFile, &header);

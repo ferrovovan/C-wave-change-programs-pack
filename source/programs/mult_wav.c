@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 	FileManager fm;  init_FileManager(&fm);
 
 	FILE* inputFile  = safe_open_file(&fm, input_file, "rb");
-	FILE* outputFile = safe_open_file(&fm, output_file, "wb");)
+	FILE* outputFile = safe_open_file(&fm, output_file, "wb");
 
 // Валидация
 	int cycles = atoi(count);
